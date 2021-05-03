@@ -1,7 +1,12 @@
 import 'package:e_wallet/Interfaces/register.dart';
+import 'package:e_wallet/Services/services.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
+  final Function toggleView;
+
+  Login({this.toggleView});
+
   @override
   _LoginState createState() => _LoginState();
 }
@@ -89,9 +94,11 @@ class _LoginState extends State<Login> {
                                         child: TextButton(
                                             onPressed: () {
                                               _loginformkey.currentState.save();
-                                              if (_loginformkey.currentState.validate())
-                                              {
-
+                                              if (_loginformkey.currentState
+                                                  .validate()) {
+                                                print("logging in");
+                                                var result =
+                                                    signin(_email, _password);
                                               }
                                             },
                                             child: Text("LogIn"))),
@@ -103,10 +110,8 @@ class _LoginState extends State<Login> {
                                       child: TextButton(
                                           onPressed: () {
                                             _loginformkey.currentState.save();
-                                            if (_loginformkey.currentState.validate())
-                                            {
-
-                                            }
+                                            if (_loginformkey.currentState
+                                                .validate()) {}
                                           },
                                           child: Text("Forgot Password")),
                                     ),
@@ -116,14 +121,8 @@ class _LoginState extends State<Login> {
                                   children: [
                                     Expanded(
                                         child: TextButton(
-                                            onPressed: ()
-                                            {
-                                              Navigator.pop(context);
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => Register()),
-                                              );
-
+                                            onPressed: () {
+                                              widget.toggleView();
                                             },
                                             child: Text("Register"))),
                                   ],

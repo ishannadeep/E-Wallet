@@ -1,16 +1,21 @@
 import 'package:e_wallet/Interfaces/login.dart';
+import 'package:e_wallet/Services/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
 
 class Register extends StatefulWidget {
+  final Function toggleView;
+
+  Register({this.toggleView});
+
   @override
   _RegisterState createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
   bool _obscuretext = true;
-
   final _registernformkey = GlobalKey<FormState>();
   final _firstnamecontroller = TextEditingController();
   final _lastnamcontroller = TextEditingController();
@@ -36,9 +41,9 @@ class _RegisterState extends State<Register> {
       _obscuretext = !_obscuretext;
     });
   }
-  void clear(){
-    setState(() {
 
+  void clear() {
+    setState(() {
       _firstnamecontroller.clear();
       _lastnamcontroller.clear();
       _birthdaycontroller.clear();
@@ -48,12 +53,12 @@ class _RegisterState extends State<Register> {
       _emailcontroller.clear();
       _passwordcontroller.clear();
     });
-
   }
+
   Future<Null> datepicker(BuildContext context) async {
     String month;
     String day;
-
+    _currenttime = DateTime.now();
     final DateTime _picked = await showDatePicker(
         context: context,
         initialDate: DateTime(1990),
@@ -258,10 +263,19 @@ class _RegisterState extends State<Register> {
                           ),
                           //Submit Button
                           TextButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 _currenttime = DateTime.now();
                                 _registernformkey.currentState.save();
                                 if (_registernformkey.currentState.validate()) {
+                                  await register(
+                                      firstname: _firstname,
+                                      lastname: _lastname,
+                                      birthday: _birthday,
+                                      nicnum: _nic,
+                                      contactnum: _contactnum,
+                                      address: _address,
+                                      email: _email,
+                                      password: _password);
                                   clear();
                                 }
                               },
@@ -271,12 +285,7 @@ class _RegisterState extends State<Register> {
                           //Login Button
                           TextButton(
                               onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()),
-                                );
+                                widget.toggleView();
                               },
                               child: Text("LogIn")),
                         ],

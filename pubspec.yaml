@@ -30,8 +30,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_core: ^1.1.0
   firebase_auth: ^1.1.2
+  cloud_firestore: ^1.0.7
   flutter_spinkit: ^5.0.0
   email_validator: ^2.0.1
+  #provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-FirebaseFirestore _firestore = FirebaseFirestore.instance;
+//FirebaseFirestore _firestore = FirebaseFirestore.instance;
 CollectionReference _users = FirebaseFirestore.instance.collection('users');
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -46,7 +46,11 @@ Future<void> register(
   }
 }
 
-Future<void> signin(String email, String password) async {
+String getuserID() {
+  return _auth.currentUser.uid;
+}
+
+Future<String> signin(String email, String password) async {
   try {
     UserCredential result = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
@@ -57,7 +61,7 @@ Future<void> signin(String email, String password) async {
       print("user-not-found");
       return 'user-not-found';
     } else if (e.code == 'wrong-password') {
-      print("wrong-password");
+      // print("wrong-password");
       return 'wrong-password';
     }
   }

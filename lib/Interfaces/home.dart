@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_wallet/Interfaces/loading.dart';
 import 'package:e_wallet/Services/services.dart';
-import 'package:e_wallet/test.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -8,21 +10,43 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
-    print("Homeuuuii");
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-      ),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            signout();
-          },
-          child: Text("Log Out"),
-        ),
-      ),
-    );
+    String userid = _auth.currentUser.uid;
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(userid)
+            .snapshots(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Loading();
+          }
+          var userDocument = snapshot.data;
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(userDocument['firstname']),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.logout),
+                  tooltip: 'Logout',
+                  onPressed: () {
+                    signout();
+                  },
+                ),
+              ],
+            ),
+            body: Center(
+              child: Container(),
+            ),
+          );
+        });
   }
 }

@@ -1,10 +1,7 @@
 import 'package:e_wallet/Interfaces/home.dart';
 import 'package:e_wallet/Interfaces/loading.dart';
-import 'package:e_wallet/Interfaces/login.dart';
-import 'package:e_wallet/test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'Interfaces/authenticate.dart';
 
 class Wrapper extends StatefulWidget {
@@ -13,8 +10,6 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  bool userstate = false;
-
   //FirebaseAuth auth=FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
@@ -34,11 +29,5 @@ class _WrapperState extends State<Wrapper> {
         return Loading();
       },
     );
-
-/*
-    if(userstate){
-      return Home();
-    }else{
-      return Login();*/
   }
 }

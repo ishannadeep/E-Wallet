@@ -20,14 +20,21 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FutureBuilder(
+      home: StreamBuilder<FirebaseApp>(
           // Initialize FlutterFire:
-          future: _initialization,
+          stream: _initialization.asStream(),
           builder: (context, snapshot) {
             // Check for errors
             if (snapshot.hasError) {
               return FirebaseError();
             }
+            if(snapshot.connectionState == ConnectionState.none){
+              return FirebaseError();
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Loading();
+            }
+
             // Once complete, show your application
             if (snapshot.connectionState == ConnectionState.done) {
               // return Provider_validator();

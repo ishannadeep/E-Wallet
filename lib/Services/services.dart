@@ -66,7 +66,10 @@ Future<String> signin(String email, String password) async {
     }
   }
 }
-
 Future signout() async {
-  await _auth.signOut();
+  try {
+    await _auth.signOut();
+  }catch(e){
+    print("Sign out error: $e");
+  }
 }

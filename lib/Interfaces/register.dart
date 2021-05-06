@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_wallet/Interfaces/home.dart';
+import 'package:e_wallet/Interfaces/loading.dart';
 import 'package:e_wallet/Services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
+
+import 'login.dart';
 
 class Register extends StatefulWidget {
   final Function toggleView;
@@ -19,6 +23,7 @@ class _RegisterState extends State<Register> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   bool _obscuretext = true;
+  bool _loading=false;
 
   final _registernformkey = GlobalKey<FormState>();
 
@@ -84,7 +89,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return _loading?Loading():Scaffold(
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -241,6 +246,7 @@ class _RegisterState extends State<Register> {
                       //password
                       TextFormField(
                         controller: _passwordcontroller,
+                        obscureText: _obscuretext,
                         validator: (value1) {
                           if (value1 == null || value1.isEmpty) {
                             return 'Empty';
@@ -253,8 +259,8 @@ class _RegisterState extends State<Register> {
                           labelText: "Password",
                           suffixIcon: IconButton(
                             icon: _obscuretext
-                                ? Icon(Icons.remove_red_eye)
-                                : Icon(Icons.remove_red_eye_outlined),
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
                             onPressed: _togglePass,
                             color: Colors.black54,
                           ),
@@ -286,10 +292,14 @@ class _RegisterState extends State<Register> {
                                             .validate()) {
                                           try {
                                             print("register");
+                                            setState(() {
+                                              _loading=true;
+                                            });
                                             UserCredential result = await _auth
                                                 .createUserWithEmailAndPassword(
                                                     email: _email,
                                                     password: _password);
+                                            print("after register if no errors!!!!");
 
                                             print(
                                                 "Register result: ${result.user.uid}");
@@ -317,8 +327,13 @@ class _RegisterState extends State<Register> {
                                                   setState(() {
                                                     _error =
                                                         'Failed to add,try again!';
+                                                    _loading=false;
                                                   });
                                                 });
+                                            if(_error=="")
+                                              {
+                                               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Home()));
+                                              }
                                           } on FirebaseAuthException catch (e) {
                                             if (e.code == 'weak-password') {
                                               print(
@@ -326,6 +341,7 @@ class _RegisterState extends State<Register> {
                                               setState(() {
                                                 _error =
                                                     'The password is too weak.';
+                                                _loading=false;
                                               });
                                             } else if (e.code ==
                                                 'email-already-in-use') {
@@ -334,13 +350,24 @@ class _RegisterState extends State<Register> {
                                               setState(() {
                                                 _error =
                                                     'The account already exists';
+                                                _loading=false;
+                                              });
+                                            }
+                                            else if(e.code == 'network-request-failed'){
+                                              print("error no internet");
+                                              print("${e.code}");
+                                              setState(() {
+                                                _error = 'error: no internet';
+                                                _loading=false;
                                               });
                                             }
                                           } catch (e) {
                                             print(e);
+
                                             setState(() {
                                               _error =
                                                   'Failed to add,try again!';
+                                              _loading=false;
                                             });
                                           }
                                           //clear();
@@ -359,8 +386,8 @@ class _RegisterState extends State<Register> {
                                 Expanded(
                                   child: TextButton(
                                       onPressed: () {
-                                        widget.toggleView();
-                                        //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Login()));
+                                       //widget.toggleView();
+                                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Login()));
                                       },
                                       child: Text("LogIn")),
                                 ),

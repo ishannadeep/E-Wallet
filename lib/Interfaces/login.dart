@@ -1,6 +1,10 @@
+import 'package:e_wallet/Interfaces/home.dart';
+import 'package:e_wallet/Interfaces/register.dart';
 import 'package:e_wallet/Services/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'loading.dart';
 
 class Login extends StatefulWidget {
   final Function toggleView;
@@ -20,6 +24,7 @@ class _LoginState extends State<Login> {
   final _passwordcontroller = TextEditingController();
 
   bool _obscuretext = true;
+  bool _loading=false;
   String _email;
   String _password;
   String _error = "";
@@ -32,7 +37,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    return _loading?Loading():Scaffold(
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -115,22 +121,37 @@ class _LoginState extends State<Login> {
                                     if (_loginformkey.currentState.validate()) {
                                       print("logging in");
                                       try {
+                                        setState(() {
+                                          _loading=true;
+                                        });
                                         UserCredential result = await _auth
                                             .signInWithEmailAndPassword(
                                                 email: _email,
                                                 password: _password);
                                         print(
                                             "loged in sucessfully, user : ${result.user.uid}");
+
+                                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Home()));
+
                                       } on FirebaseAuthException catch (e) {
                                         if (e.code == 'user-not-found') {
                                           print("user-not-found");
                                           setState(() {
                                             _error = 'user not found';
+                                            _loading=false;
                                           });
                                         } else if (e.code == 'wrong-password') {
                                           print("wrong-password");
                                           setState(() {
                                             _error = 'wrong password';
+                                            _loading=false;
+                                          });
+                                        }else if(e.code == 'network-request-failed'){
+                                          print("error no internet");
+                                          print("${e.code}");
+                                          setState(() {
+                                            _error = 'error: no internet';
+                                            _loading=false;
                                           });
                                         }
                                       }
@@ -146,9 +167,9 @@ class _LoginState extends State<Login> {
                             Expanded(
                               child: TextButton(
                                   onPressed: () {
-                                    widget.toggleView();
+                                   // widget.toggleView();
                                     //Navigator.of(context).pushNamed(AppRoutes.);
-                                    //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Register()));
+                                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Register()));
                                   },
                                   child: Text("Register")),
                             ),

@@ -11,25 +11,22 @@ import 'error.dart';
 import 'home_theme.dart';
 import 'login.dart';
 import 'package:e_wallet/widgets/home_widget.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  bool _loading=false;
-
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
-    if(_auth==null){
+    if (_auth == null) {
       print("uid nulll error");
       return Loading();
-    }else{
+    } else {
       String userid = _auth.currentUser.uid;
       return StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
@@ -42,12 +39,13 @@ class _HomeState extends State<Home> {
             if (snapshot.hasError) {
               return FirebaseError();
             }
-
-           if(snapshot.connectionState == ConnectionState.active){
-              return HomeSecond(user: userDocument['firstname'],);
+            if (snapshot.connectionState == ConnectionState.active) {
+              return HomeSecond(
+                user: userDocument['firstname'],
+              );
             }
             return Home_theme();
           });
     }
-    }
+  }
 }

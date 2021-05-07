@@ -57,7 +57,7 @@ class _Transaction_widgetState extends State<Transaction_widget> {
       AnimatedPositioned(
         curve: Curves.easeInOut,
         duration: Duration(milliseconds: 250),
-        bottom: _showBottomMenuebar?0:-height/2.253,
+        bottom: _showBottomMenuebar?0:-height/2.8, //2.53
         child: SingleChildScrollView(
           child: ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
@@ -82,7 +82,7 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                   //color: Colors.black26,
                   color: Colors.white70,
                   width: width,
-                  height: height/3+140,
+                  height: height/2.3, //1.94
                   padding: EdgeInsets.all(10),
                   child: Form(
                       child: Column(

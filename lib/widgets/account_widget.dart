@@ -11,10 +11,12 @@ class Account_widget extends StatefulWidget {
 class _Account_widgetState extends State<Account_widget> {
   bool _showBottomMenuebar=false;
   String _error="";
+
   @override
   Widget build(BuildContext context) {
     var width=MediaQuery.of(context).size.width;
     var height=MediaQuery.of(context).size.height;
+    double height_appbar = Scaffold.of(context).appBarMaxHeight;
     return Stack(children:[
       ListView.builder(
           itemCount: 6,
@@ -56,7 +58,7 @@ class _Account_widgetState extends State<Account_widget> {
       AnimatedPositioned(
         curve: Curves.easeInOut,
         duration: Duration(milliseconds: 250),
-        bottom: _showBottomMenuebar?0:-height/2.8,
+        bottom: _showBottomMenuebar?0:-height+width/4*3.3,
         child: SingleChildScrollView(
           child: ClipRRect(
             borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
@@ -80,51 +82,54 @@ class _Account_widgetState extends State<Account_widget> {
                 //color: Colors.black26,
                 color: Colors.white70,
                 width: width,
-                height: height/3+80,
+                //height:height-height_appbar,
                 padding: EdgeInsets.all(10),
-                child: Form(
-                    child: Column(
-                      children: [
-                        _showBottomMenuebar?Icon(Icons.arrow_drop_down):Icon(Icons.arrow_drop_up),
-                        _showBottomMenuebar?Text("Drag down to Close"):Text("Drag up to Enter an Account"),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: "Account name",
+                child: AspectRatio(
+                  aspectRatio: 1/1,
+                  child: Form(
+                      child: Column(
+                        children: [
+                          _showBottomMenuebar?Icon(Icons.arrow_drop_down):Icon(Icons.arrow_drop_up),
+                          _showBottomMenuebar?Text("Drag down to Close"):Text("Drag up to Enter an Account"),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    labelText: "Account name",
+                                  ),
+
                                 ),
-
                               ),
-                            ),
-                            SizedBox(width: 10,),
-                            Expanded(
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: "Bank name",
+                              SizedBox(width: 10,),
+                              Expanded(
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    labelText: "Bank name",
+                                  ),
+
                                 ),
-
                               ),
+                            ],
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "Account number",
                             ),
-                          ],
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Account number",
+
                           ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              labelText: "Current amount",
+                            ),
 
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            labelText: "Current amount",
                           ),
+                          Text(_error,style: TextStyle(color: Colors.red,fontSize: 20),),
+                          Expanded(child: TextButton(onPressed: (){}, child: Text("Submit"))),
 
-                        ),
-                        Text(_error,style: TextStyle(color: Colors.red,fontSize: 20),),
-                        Expanded(child: TextButton(onPressed: (){}, child: Text("Submit"))),
-
-                      ],
-                    )
+                        ],
+                      )
+                  ),
                 ),
               ),
             ),

@@ -8,7 +8,7 @@ import 'package:e_wallet/widgets/transactions_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'error.dart';
-import 'home_theme.dart';
+import 'home_second.dart';
 import 'login.dart';
 import 'package:e_wallet/widgets/home_widget.dart';
 

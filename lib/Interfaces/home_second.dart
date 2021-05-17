@@ -37,6 +37,7 @@ class _HomeSecondState extends State<HomeSecond> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        //resizeToAvoidBottomInset : false,
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text(widget.user),
@@ -57,6 +58,7 @@ class _HomeSecondState extends State<HomeSecond> {
             ),
           ],
         ),
+        drawer: user_drawer,
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),

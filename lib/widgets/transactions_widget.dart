@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:regexpattern/regexpattern.dart';
 
 class Transaction_widget extends StatefulWidget {
   const Transaction_widget({Key key}) : super(key: key);
@@ -9,10 +11,18 @@ class Transaction_widget extends StatefulWidget {
 }
 
 class _Transaction_widgetState extends State<Transaction_widget> {
-  String dropdownValue = 'To';
+
+  final transaction_key=GlobalKey<FormState>();
+  String _dropdownValue = 'To';
   String _error="";
+  String _current_amount;
+  String _amount;
+  String _date;
+  String _time;
+  String _name;
   @override
   Widget build(BuildContext context) {
+
     var width=MediaQuery.of(context).size.width;
     var height=MediaQuery.of(context).size.height;
     return Stack(
@@ -58,6 +68,7 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                      // decoration: BoxDecoration(borderRadius:BorderRadiusDirectional.vertical(top: Radius.circular(25)),color: Colors.red),
                       padding: EdgeInsets.all(10),
                       child: Form(
+                        key: transaction_key,
                           child: Column(
                             children: [
                               Icon(Icons.arrow_drop_down),
@@ -71,6 +82,15 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                       children: [
                                         Expanded(
                                           child: TextFormField(
+
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(RegExp(r"^\d+\.?\d{0,2}"))
+                                            ],
+                                            validator: (value){
+                                              if(value.isEmpty)
+                                                return "Empty";
+                                              else return null;
+                                            },
                                             decoration: InputDecoration(
                                               labelText: "Amount",
                                             ),
@@ -85,7 +105,7 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                           flex: 1,
                                           child: Container(
                                             child: DropdownButtonFormField<String>(
-                                              value: dropdownValue,
+                                              value: _dropdownValue,
                                               icon: Icon(Icons.arrow_drop_down),
                                               //iconSize: 24,
                                               //elevation: 16,
@@ -97,12 +117,17 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                                 labelText: 'Select To or From',
                                                 contentPadding: EdgeInsets.symmetric(vertical: 9.5),
                                               ),
-
+                                              validator: (value){
+                                                if(value.isEmpty)
+                                                  return "Empty";
+                                                else return null;
+                                              },
                                               onChanged: (String newValue) {
                                                 setState(() {
-                                                  dropdownValue = newValue;
+                                                  _dropdownValue = newValue;
                                                 });
                                               },
+                                              onSaved: (value)=>_dropdownValue=value,
                                               items: <String>['To', 'From']
                                                   .map<DropdownMenuItem<String>>((String value) {
                                                 return DropdownMenuItem<String>(
@@ -118,6 +143,15 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                         Expanded(
                                           flex: 2,
                                           child: TextFormField(
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+                                            ],
+                                            validator: (value){
+                                              if(value.isEmpty)
+                                                return "Empty";
+                                              else return null;
+                                            },
+                                            onSaved: (value)=>_name=value,
                                             decoration: InputDecoration(
                                               labelText: "Name",
                                             ),
@@ -130,6 +164,12 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                       children: [
                                         Expanded(
                                           child: TextFormField(
+                                            validator: (value){
+                                              if(value.isEmpty)
+                                                return "Empty";
+                                              else return null;
+                                            },
+                                            onSaved: (value)=>_date=value,
                                             decoration: InputDecoration(
                                               labelText: "Date",
                                             ),
@@ -139,6 +179,12 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                         SizedBox(width: 10,),
                                         Expanded(
                                           child: TextFormField(
+                                            validator: (value){
+                                              if(value.isEmpty)
+                                                return "Empty";
+                                              else return null;
+                                            },
+                                            onSaved: (value)=>_time=value,
                                             decoration: InputDecoration(
                                               labelText: "Time",
                                             ),
@@ -148,6 +194,15 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                       ],
                                     ),
                                     TextFormField(
+                                      inputFormatters: [
+                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]\.[0-9]'))
+                                      ],
+                                      validator: (value){
+                                        if(value.isEmpty)
+                                          return "Empty";
+                                        else return null;
+                                      },
+                                      onSaved: (value)=>_current_amount=value,
                                       decoration: InputDecoration(
                                         labelText: "Current amount",
                                       ),
@@ -156,7 +211,17 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                     Text(_error,style: TextStyle(color: Colors.red,fontSize: 20),),
                                     Row(
                                       children: [
-                                        Expanded(child: TextButton(onPressed: (){}, child: Text("Submit"))),
+                                        Expanded(
+                                            child: TextButton(
+                                                onPressed: (){
+                                                  transaction_key.currentState.save();
+                                                  if(transaction_key.currentState.validate()){
+                                                    print("validated");
+                                                  }
+                                                },
+                                                child: Text("Submit")
+                                            )
+                                        ),
                                       ],
                                     ),
 

@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:regexpattern/regexpattern.dart';
-
+import 'package:e_wallet/Services/currency_inputformatter.dart';
 class Transaction_widget extends StatefulWidget {
   const Transaction_widget({Key key}) : super(key: key);
 
@@ -20,6 +20,7 @@ class _Transaction_widgetState extends State<Transaction_widget> {
   String _date;
   String _time;
   String _name;
+
   @override
   Widget build(BuildContext context) {
 
@@ -84,7 +85,8 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                           child: TextFormField(
 
                                             inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r"^\d+\.?\d{0,2}"))
+                                             // FilteringTextInputFormatter.allow(RegExp(r"^\d+\.?\d{0,2}"))
+                                                CurrencyInputFormatter()
                                             ],
                                             validator: (value){
                                               if(value.isEmpty)

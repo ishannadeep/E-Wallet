@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:e_wallet/Services/string_split.dart';
+import 'package:e_wallet/Services/currency_inputformatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +13,7 @@ class Account_widget extends StatefulWidget {
 
 class _Account_widgetState extends State<Account_widget> {
 
+  final currency_controller=TextEditingController();
   String _error="";
   final account_key=GlobalKey<FormState>();
   String _account_name;
@@ -112,8 +114,10 @@ class _Account_widgetState extends State<Account_widget> {
                             children: [
                               Expanded(
                                 child: TextFormField(
+                                  controller: currency_controller,
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
+                                    CurrencyInputFormatter()
+
                                   ],
                                   validator: (value){
                                     if(value.isEmpty)
@@ -135,7 +139,7 @@ class _Account_widgetState extends State<Account_widget> {
                               Expanded(
                                   child: TextButton(
                                       onPressed: (){
-                                        print(splitText("qishannadeepkalan",3));
+
 
                                         account_key.currentState.save();
                                         if(account_key.currentState.validate()){

@@ -1,7 +1,7 @@
 splitText(String _string, int _num) {
   print("started splittext function");
-  if(_string!=null){
-    int hasdot=_string.indexOf('.');
+  if (_string != null) {
+    int hasdot = _string.indexOf('.');
     print("hasdot: $hasdot");
     List<String> _temp_str = _string.split(".");
     String _neededString = _temp_str[0];
@@ -39,12 +39,32 @@ splitText(String _string, int _num) {
       _x = _num;
       _num = _num + _tempnum;
     }
-    if(_temp_str.length==1 && hasdot==-1)
+    if (_temp_str.length == 1 && hasdot == -1)
       return _tem.join().split('').reversed.join();
-    else if(hasdot!=-1 && _temp_str.length==2)
-      return _tem.join().split('').reversed.join()+"."+_temp_str[1];
-    else if(hasdot!=-1 && _temp_str.length==1)
-      return _tem.join().split('').reversed.join()+".";
-  }else return null;
+    else if (hasdot != -1 && _temp_str.length == 2)
+      return _tem.join().split('').reversed.join() + "." + _temp_str[1];
+    else if (hasdot != -1 && _temp_str.length == 1)
+      return _tem.join().split('').reversed.join() + ".";
+  } else
+    return null;
+}
 
+currencyFormatter(String value) {
+  int hasdot = value.indexOf('.');
+  List<String> _temp_str = value.split(".");
+  if (_temp_str.length == 1 && hasdot == -1 ||
+      _temp_str.length == 1 && hasdot != -1) {
+    _temp_str.add(".00");
+    return _temp_str.join();
+  } else if (_temp_str.length == 2 && hasdot != -1) {
+    if (_temp_str[1].length == 1) {
+      _temp_str.add("." + _temp_str[1] + "0");
+      _temp_str[1] = "";
+      return _temp_str.join();
+    } else if (_temp_str[1] == "") {
+      _temp_str.add(".00");
+      return _temp_str.join();
+    } else
+      return value;
+  }
 }

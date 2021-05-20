@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:e_wallet/Services/string_split.dart';
+import 'package:e_wallet/Services/currency_manupulation.dart';
 import 'package:e_wallet/Services/currency_inputformatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -124,7 +124,7 @@ class _Account_widgetState extends State<Account_widget> {
                                       return "Empty";
                                     else return null;
                                   },
-                                  onSaved: (value)=>_current_amount=value,
+                                  onSaved: (value)=>_current_amount=currencyFormatter(value),
                                   decoration: InputDecoration(
                                     labelText: "Current amount",
                                   ),
@@ -142,6 +142,7 @@ class _Account_widgetState extends State<Account_widget> {
 
 
                                         account_key.currentState.save();
+                                        print("_current_amount : $_current_amount");
                                         if(account_key.currentState.validate()){
                                           print("validated");
                                         }

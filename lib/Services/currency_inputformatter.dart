@@ -6,16 +6,13 @@ class CurrencyInputFormatter extends TextInputFormatter {
       TextEditingValue oldValue,
       TextEditingValue newValue
       ) {
-    print("new value : $newValue");
     RegExp exp = RegExp(
         r"^\d+\.?\d{0,2}$");
 
    String  _string=newValue.text.split(',').join();
-   print("hasmatch exp : ${exp.hasMatch(_string)}");
     if(exp.hasMatch(_string)){
       if(_string!=null){
         int hasdot=_string.indexOf('.');
-        print("hasdot: $hasdot");
         List<String> _temp_str = _string.split(".");
         String _neededString = _temp_str[0];
         int _length = _neededString.length;
@@ -59,7 +56,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
           return TextEditingValue(
               text:tempstr,
 
-              selection: TextSelection.fromPosition(TextPosition(offset: tempstr.length))
+              selection: TextSelection.fromPosition(TextPosition(offset: newValue.selection.baseOffset))
           );
         }
 
@@ -69,16 +66,17 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
               text:tempstr,
 
-              selection: TextSelection.fromPosition(TextPosition(offset:tempstr.length))
+              selection: TextSelection.fromPosition(TextPosition(offset: newValue.selection.baseOffset))
           );
         }
 
         else if(hasdot!=-1 && _temp_str.length==1){
           String tempstr=_tem.join().split('').reversed.join()+".";
+
           return TextEditingValue(
               text:tempstr,
 
-              selection: TextSelection.fromPosition(TextPosition(offset: tempstr.length))
+              selection: TextSelection.fromPosition(TextPosition(offset: newValue.selection.baseOffset))
           );
         }
 
@@ -87,7 +85,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
       return TextEditingValue(
           text:oldValue.text,
 
-          selection: TextSelection.fromPosition(TextPosition(offset: oldValue.text.length))
+          selection: TextSelection.fromPosition(TextPosition(offset: oldValue.selection.baseOffset))
       );
     }
 

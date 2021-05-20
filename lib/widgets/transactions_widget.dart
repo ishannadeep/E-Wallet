@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:e_wallet/Services/currency_manupulation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:regexpattern/regexpattern.dart';
@@ -93,6 +94,7 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                                 return "Empty";
                                               else return null;
                                             },
+                                            onSaved: (value)=>_amount=currencyFormatter(value),
                                             decoration: InputDecoration(
                                               labelText: "Amount",
                                             ),
@@ -217,6 +219,7 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                             child: TextButton(
                                                 onPressed: (){
                                                   transaction_key.currentState.save();
+                                                  print("_current_amount : $_amount");
                                                   if(transaction_key.currentState.validate()){
                                                     print("validated");
                                                   }

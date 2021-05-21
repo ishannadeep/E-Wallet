@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:e_wallet/Services/currency_manupulation.dart';
-import 'package:e_wallet/Services/currency_inputformatter.dart';
+import 'package:e_wallet/Services/custom_inputformatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

@@ -3,7 +3,7 @@ import 'package:e_wallet/Services/currency_manupulation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:regexpattern/regexpattern.dart';
-import 'package:e_wallet/Services/currency_inputformatter.dart';
+import 'package:e_wallet/Services/custom_inputformatter.dart';
 class Transaction_widget extends StatefulWidget {
   const Transaction_widget({Key key}) : super(key: key);
 
@@ -14,6 +14,8 @@ class Transaction_widget extends StatefulWidget {
 class _Transaction_widgetState extends State<Transaction_widget> {
 
   final transaction_key=GlobalKey<FormState>();
+  final date_controller=TextEditingController();
+  final time_controller=TextEditingController();
   String _dropdownValue = 'To';
   String _error="";
   String _current_amount;
@@ -21,7 +23,53 @@ class _Transaction_widgetState extends State<Transaction_widget> {
   String _date;
   String _time;
   String _name;
+  DateTime _currentdate;
+  TimeOfDay _currenttime;
+  Future<Null> datepicker(BuildContext context) async {
+    String month;
+    String day;
+    String year;
+    _currentdate = DateTime.now();
+    final DateTime _picked = await showDatePicker(
+        context: context,
+        initialDate: _currentdate,
+        firstDate:DateTime(2000),
+        lastDate: _currentdate);
+    if (_picked != null ) {
 
+        year = _picked.year.toString();
+        month = _picked.month.toString();
+        day = _picked.day.toString();
+        date_controller.text = day + "-" + month + "-" + year;
+
+    }
+  }
+  Future timepicker(BuildContext context)async{
+    String hour;
+    String minute;
+    final TimeOfDay newTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: 7, minute: 15),
+    );
+    if (newTime != null ) {
+
+        hour = newTime.hour.toString();
+        minute = newTime.minute.toString();
+
+        time_controller.text = hour + ":" + minute;
+
+
+    }
+  }
+@override
+void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentdate = DateTime.now();
+    _currenttime=TimeOfDay.now();
+    date_controller.text =_currentdate.day.toString()+"-"+_currentdate.month.toString()+"-"+_currentdate.year.toString();
+    time_controller.text=_currenttime.hour.toString()+":"+_currenttime.minute.toString();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -168,14 +216,26 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                       children: [
                                         Expanded(
                                           child: TextFormField(
+
+
                                             validator: (value){
                                               if(value.isEmpty)
                                                 return "Empty";
                                               else return null;
                                             },
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(RegExp(r'^(([1-9]|[12]\d|3[01])-([1-9]|1[0-2])-([12]\d{3}))$|^[0-9]$|^([012]\d|3[01])$|^([0-9]-)$|^([012]\d-|3[01]-)$|^([1-9]|[12]\d|3[01])-([1-9]|0[1-9]|1[0-2])$|^([1-9]|[12]\d|3[01])-([1-9]|0[1-9]|1[0-2])-$|^([1-9]|[12]\d|3[01])-([1-9]|0[1-9]|1[0-2])-([12])$|^([1-9]|[12]\d|3[01])-([1-9]|0[1-9]|1[0-2])-([12]\d{0,3})$'))
+
+                                            ],
+                                            //enabled: false,
+                                            controller: date_controller,
                                             onSaved: (value)=>_date=value,
                                             decoration: InputDecoration(
                                               labelText: "Date",
+                                              suffixIcon: IconButton(
+                                                icon: Icon(Icons.calendar_today),
+                                                onPressed:(){datepicker(context);} ,
+                                              )
                                             ),
 
                                           ),
@@ -183,13 +243,28 @@ class _Transaction_widgetState extends State<Transaction_widget> {
                                         SizedBox(width: 10,),
                                         Expanded(
                                           child: TextFormField(
+                                            
+
                                             validator: (value){
                                               if(value.isEmpty)
                                                 return "Empty";
                                               else return null;
                                             },
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter.allow(RegExp(r'^[1-9]$|^0[1-9]$|^[01][0-9]$|^[012][0-3]:$|^[2][0-3]$|^[012][0-3]:[0-5]$|^[012][0-3]:[1-9]$|^[012][0-3]:[0-5][0-9]$'))
+                                            ],
+
+                                            controller: time_controller,
+
                                             onSaved: (value)=>_time=value,
+
                                             decoration: InputDecoration(
+                                              suffixIcon: IconButton(
+                                                icon:Icon(Icons.access_time),
+                                                onPressed: (){timepicker(context);},
+
+                                              ),
+
                                               labelText: "Time",
                                             ),
 

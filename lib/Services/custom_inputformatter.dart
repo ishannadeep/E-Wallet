@@ -92,3 +92,19 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
   }
 }
+
+class DateInputFormatters extends TextInputFormatter{
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    RegExp exp = RegExp(
+        r"^\d{1,31}+\-+\d{1,12}+\d$");
+    if(exp.hasMatch(newValue.text))
+      {
+
+      }
+    throw UnimplementedError();
+  }
+
+
+
+}

@@ -20,6 +20,7 @@ class _Account_widgetState extends State<Account_widget> {
   String _bank_name;
   String _account_number;
   String _current_amount;
+  String _card_type;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class _Account_widgetState extends State<Account_widget> {
                               Expanded(
                                 child: TextFormField(
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]|\s'))
                                   ],
                                   validator: (value){
                                     if(value.isEmpty)
@@ -73,7 +74,7 @@ class _Account_widgetState extends State<Account_widget> {
                               Expanded(
                                 child: TextFormField(
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+                                    FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]|\s'))
                                   ],
                                   validator: (value){
                                     if(value.isEmpty)
@@ -110,6 +111,23 @@ class _Account_widgetState extends State<Account_widget> {
                               ),
                             ],
                           ),
+                          /*
+                          Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Radio(value: "visa", groupValue: _card_type, onChanged: (value){_card_type=value;}),
+                                  Image(image: AssetImage("images/visa_logo.png"),width: 195,height: 30,)
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Radio(value: "visa", groupValue: _card_type, onChanged: (value){_card_type=value;}),
+                                  Image(image: AssetImage("images/master_logo.png"),width: 195,height: 30,)
+                                ],
+                              )
+                            ],
+                          ),*/
                           Row(
                             children: [
                               Expanded(
@@ -160,29 +178,47 @@ class _Account_widgetState extends State<Account_widget> {
       });
     }
 
-    return Stack(
-        children:[
-            ListView.builder(
-                //physics: const NeverScrollableScrollPhysics(),
-                itemCount: 6,
-                itemBuilder: (context,index){
-             return Card(
-               color: Colors.indigo,
-               child: Theme(
-                 data: ThemeData(
-                   splashColor: Colors.lightBlueAccent,
-                      highlightColor: Colors.lightBlueAccent,
-                 ),
-                 child: ListTile(
-                     title: Text("First item",style: TextStyle(color: Colors.white),),
-                     onTap: () { }
-                  ),
-               ),
-             );
-            }),
+    return Column(
 
-            Positioned(
-              bottom:0,
+        children:[
+            Expanded(
+              flex: 8,
+              child: Container(
+
+                width: width,
+                //height: height-200,
+                child: ListView.builder(
+
+                    //physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    itemBuilder: (context,index){
+                 return Card(
+                   color: Colors.indigo,
+                   child: Theme(
+                     data: ThemeData(
+                       splashColor: Colors.lightBlueAccent,
+                          highlightColor: Colors.lightBlueAccent,
+                       selectedRowColor: Colors.black
+                     ),
+                     child: ExpansionTile(
+                         title: Text("ACC Name",style: TextStyle(color: Colors.white),),
+                         subtitle: Text("Bank name ",style: TextStyle(color: Colors.white),),
+                         trailing: Text("Current Amount:20000.00",style: TextStyle(color: Colors.white,fontSize: 20),),
+                         children: [
+
+                           Text("Acc:1054396458",style: TextStyle(color: Colors.white,fontSize: 20),),
+
+
+                         ],
+                      ),
+                   ),
+                 );
+                }),
+              ),
+            ),
+
+            Expanded(
+              flex: 1,
               child: GestureDetector(
                 onPanEnd: (details){
                   if(details.velocity.pixelsPerSecond.dy<10){
@@ -192,6 +228,7 @@ class _Account_widgetState extends State<Account_widget> {
                 child: Container(
                   decoration: BoxDecoration(borderRadius:BorderRadiusDirectional.vertical(top: Radius.circular(25)),color: Colors.blue),
                   width: width,
+                  //height: 60,
                   padding: EdgeInsets.all(10),
                   child: Column(
                     children: [

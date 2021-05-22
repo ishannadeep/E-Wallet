@@ -75,31 +75,44 @@ void initState() {
 
     var width=MediaQuery.of(context).size.width;
     var height=MediaQuery.of(context).size.height;
-    return Stack(
+    return Column(
       //fit: StackFit.loose,
         children:[
-      ListView.builder(
-          itemCount: 6,
-          itemBuilder: (context,index){
-            return Card(
-              color: Colors.indigo,
-              child: Theme(
-                data: ThemeData(
-                  splashColor: Colors.lightBlueAccent,
-                  highlightColor: Colors.lightBlueAccent,
-                  // backgroundColor: Colors.indigo
+      Expanded(
+        flex: 8,
+        child: Container(
+          width: width,
+          child: ListView.builder(
+              itemCount: 12,
+              itemBuilder: (context,index){
+                return Card(
+                  color: Colors.indigo,
+                  child: Theme(
+                    data: ThemeData(
+                      splashColor: Colors.lightBlueAccent,
+                      highlightColor: Colors.lightBlueAccent,
+                      // backgroundColor: Colors.indigo
 
-                )
-                ,
-                child: ListTile(
-                    title: Text("First item",style: TextStyle(color: Colors.white),),
-                    onTap: () { }
-                ),
-              ),
-            );
-          }),
-      Positioned(
-        bottom:0,
+                    )
+                    ,
+                    child: ExpansionTile(
+                      title: Text("To:Barclays",style: TextStyle(color: Colors.white),),
+                      subtitle: Text("12:56 , 12-05-2020 ",style: TextStyle(color: Colors.white),),
+                      trailing: Text("Amount:20000.00",style: TextStyle(color: Colors.white,fontSize: 20),),
+                      children: [
+                        Text("Account name",style: TextStyle(color: Colors.white,fontSize: 20),),
+                        Text("Acc:1054396458",style: TextStyle(color: Colors.white,fontSize: 20),),
+                        Text("Bank name",style: TextStyle(color: Colors.white,fontSize: 20),),
+
+                      ],
+                    ),
+                  ),
+                );
+              }),
+        ),
+      ),
+      Expanded(
+        flex: 1,
         child: GestureDetector(
           onPanEnd: (details){
 
@@ -196,7 +209,7 @@ void initState() {
                                           flex: 2,
                                           child: TextFormField(
                                             inputFormatters: [
-                                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))
+                                              FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]|\s'))
                                             ],
                                             validator: (value){
                                               if(value.isEmpty)
@@ -219,6 +232,7 @@ void initState() {
 
 
                                             validator: (value){
+                                              RegExp exp=RegExp(r'^((0[1-9]|[12]\d|3[01]|[1-9])-(0[1-9]|1[0-2]|[1-9])-([12]\d{3}))$');
                                               if(value.isEmpty)
                                                 return "Empty";
                                               else return null;
@@ -243,15 +257,21 @@ void initState() {
                                         SizedBox(width: 10,),
                                         Expanded(
                                           child: TextFormField(
-                                            
+
+
 
                                             validator: (value){
+                                              RegExp exp=RegExp(r'^((0[0-9]|[0-9]|[2][0-3]|1[0-9]):([1-9]|[1-5][0-9]|0[0-9]))$');
                                               if(value.isEmpty)
                                                 return "Empty";
+                                              else if(!exp.hasMatch(value))
+                                                return "Invalid Format";
                                               else return null;
+
                                             },
                                             inputFormatters: [
                                               FilteringTextInputFormatter.allow(RegExp(r'^[1-9]$|^0[1-9]$|^[01][0-9]$|^[012][0-3]:$|^[2][0-3]$|^[012][0-3]:[0-5]$|^[012][0-3]:[1-9]$|^[012][0-3]:[0-5][0-9]$'))
+
                                             ],
 
                                             controller: time_controller,
@@ -274,14 +294,14 @@ void initState() {
                                     ),
                                     TextFormField(
                                       inputFormatters: [
-                                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]\.[0-9]'))
+                                        CurrencyInputFormatter()
                                       ],
                                       validator: (value){
                                         if(value.isEmpty)
                                           return "Empty";
                                         else return null;
                                       },
-                                      onSaved: (value)=>_current_amount=value,
+                                      onSaved: (value)=>_current_amount=currencyFormatter(value),
                                       decoration: InputDecoration(
                                         labelText: "Current amount",
                                       ),

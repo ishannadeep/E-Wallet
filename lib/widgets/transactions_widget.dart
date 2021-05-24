@@ -11,8 +11,9 @@ class Transaction_widget extends StatefulWidget {
   _Transaction_widgetState createState() => _Transaction_widgetState();
 }
 
-class _Transaction_widgetState extends State<Transaction_widget> {
-
+class _Transaction_widgetState extends State<Transaction_widget> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
   final transaction_key=GlobalKey<FormState>();
   final date_controller=TextEditingController();
   final time_controller=TextEditingController();

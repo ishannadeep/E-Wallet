@@ -1,6 +1,8 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_wallet/Services/currency_manupulation.dart';
 import 'package:e_wallet/Services/custom_inputformatter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -11,8 +13,9 @@ class Account_widget extends StatefulWidget {
   _Account_widgetState createState() => _Account_widgetState();
 }
 
-class _Account_widgetState extends State<Account_widget> {
-
+class _Account_widgetState extends State<Account_widget> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
   final currency_controller=TextEditingController();
   String _error="";
   final account_key=GlobalKey<FormState>();
@@ -24,6 +27,8 @@ class _Account_widgetState extends State<Account_widget> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    CollectionReference _users = FirebaseFirestore.instance.collection(_auth.currentUser.uid+"account");
 
     var width=MediaQuery.of(context).size.width;
     var height=MediaQuery.of(context).size.height;

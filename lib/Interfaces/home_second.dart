@@ -17,6 +17,7 @@ class HomeSecond extends StatefulWidget {
 
 class _HomeSecondState extends State<HomeSecond> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   int _selectedIndex = 0;
   PageController _pageController;
@@ -67,6 +68,7 @@ class _HomeSecondState extends State<HomeSecond> {
         ),
         drawer: user_drawer,
         body: PageView(
+
             controller: _pageController,
           onPageChanged: (newPage){
             setState((){
@@ -76,6 +78,7 @@ class _HomeSecondState extends State<HomeSecond> {
           children:[
             Center(
               child: Home_widget(),
+
             ),
             Center(
               child: Transaction_widget(),
@@ -127,6 +130,7 @@ class _bottom_navigation_barState extends State<bottom_navigation_bar> {
   }
 }
 
+//.......................................................................................................................................................
 
 class Home_theme extends StatelessWidget {
   const Home_theme({Key key}) : super(key: key);

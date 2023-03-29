@@ -25,7 +25,7 @@ class _HomeSecondState extends State<HomeSecond> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Home_widget(),
-    Transaction_widget(),
+    TransactionWidget(),
     Account_widget()
   ];
   @override
@@ -81,7 +81,7 @@ class _HomeSecondState extends State<HomeSecond> {
 
             ),
             Center(
-              child: Transaction_widget(),
+              child: TransactionWidget(),
             ),
             Center(
               child:Account_widget(),

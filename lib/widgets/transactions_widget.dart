@@ -4,44 +4,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:regexpattern/regexpattern.dart';
 import 'package:e_wallet/Services/custom_inputformatter.dart';
-class Transaction_widget extends StatefulWidget {
-  const Transaction_widget({Key key}) : super(key: key);
+class TransactionWidget extends StatefulWidget {
+  const TransactionWidget({Key key}) : super(key: key);
 
   @override
-  _Transaction_widgetState createState() => _Transaction_widgetState();
+  _TransactionWidgetState createState() => _TransactionWidgetState();
 }
 
-class _Transaction_widgetState extends State<Transaction_widget> with AutomaticKeepAliveClientMixin{
+class _TransactionWidgetState extends State<TransactionWidget> with AutomaticKeepAliveClientMixin{
   @override
   bool get wantKeepAlive => true;
-  final transaction_key=GlobalKey<FormState>();
-  final date_controller=TextEditingController();
-  final time_controller=TextEditingController();
+  final transactionKey=GlobalKey<FormState>();
+  final dateController=TextEditingController();
+  final timeController=TextEditingController();
   String _dropdownValue = 'To';
   String _error="";
-  String _current_amount;
+  String currentAmount;
   String _amount;
   String _date;
   String _time;
   String _name;
-  DateTime _currentdate;
-  TimeOfDay _currenttime;
-  Future<Null> datepicker(BuildContext context) async {
+  DateTime _currentDate;
+  TimeOfDay _currentTime;
+  Future<Null> datePicker(BuildContext context) async {
     String month;
     String day;
     String year;
-    _currentdate = DateTime.now();
+    _currentDate = DateTime.now();
     final DateTime _picked = await showDatePicker(
         context: context,
-        initialDate: _currentdate,
+        initialDate: _currentDate,
         firstDate:DateTime(2000),
-        lastDate: _currentdate);
+        lastDate: _currentDate);
     if (_picked != null ) {
 
         year = _picked.year.toString();
         month = _picked.month.toString();
         day = _picked.day.toString();
-        date_controller.text = day + "-" + month + "-" + year;
+        dateController.text = day + "-" + month + "-" + year;
 
     }
   }
@@ -57,7 +57,7 @@ class _Transaction_widgetState extends State<Transaction_widget> with AutomaticK
         hour = newTime.hour.toString();
         minute = newTime.minute.toString();
 
-        time_controller.text = hour + ":" + minute;
+        timeController.text = hour + ":" + minute;
 
 
     }
@@ -66,10 +66,10 @@ class _Transaction_widgetState extends State<Transaction_widget> with AutomaticK
 void initState() {
     // TODO: implement initState
     super.initState();
-    _currentdate = DateTime.now();
-    _currenttime=TimeOfDay.now();
-    date_controller.text =_currentdate.day.toString()+"-"+_currentdate.month.toString()+"-"+_currentdate.year.toString();
-    time_controller.text=_currenttime.hour.toString()+":"+_currenttime.minute.toString();
+    _currentDate = DateTime.now();
+    _currentTime=TimeOfDay.now();
+    dateController.text =_currentDate.day.toString()+"-"+_currentDate.month.toString()+"-"+_currentDate.year.toString();
+    timeController.text=_currentTime.hour.toString()+":"+_currentTime.minute.toString();
   }
   @override
   Widget build(BuildContext context) {
@@ -132,7 +132,7 @@ void initState() {
                      // decoration: BoxDecoration(borderRadius:BorderRadiusDirectional.vertical(top: Radius.circular(25)),color: Colors.red),
                       padding: EdgeInsets.all(10),
                       child: Form(
-                        key: transaction_key,
+                        key: transactionKey,
                           child: Column(
                             children: [
                               Icon(Icons.arrow_drop_down),
@@ -243,13 +243,13 @@ void initState() {
 
                                             ],
                                             //enabled: false,
-                                            controller: date_controller,
+                                            controller: dateController,
                                             onSaved: (value)=>_date=value,
                                             decoration: InputDecoration(
                                               labelText: "Date",
                                               suffixIcon: IconButton(
                                                 icon: Icon(Icons.calendar_today),
-                                                onPressed:(){datepicker(context);} ,
+                                                onPressed:(){datePicker(context);} ,
                                               )
                                             ),
 
@@ -275,7 +275,7 @@ void initState() {
 
                                             ],
 
-                                            controller: time_controller,
+                                            controller: timeController,
 
                                             onSaved: (value)=>_time=value,
 
@@ -302,7 +302,7 @@ void initState() {
                                           return "Empty";
                                         else return null;
                                       },
-                                      onSaved: (value)=>_current_amount=currencyFormatter(value),
+                                      onSaved: (value)=>currentAmount=currencyFormatter(value),
                                       decoration: InputDecoration(
                                         labelText: "Current amount",
                                       ),
@@ -314,9 +314,9 @@ void initState() {
                                         Expanded(
                                             child: TextButton(
                                                 onPressed: (){
-                                                  transaction_key.currentState.save();
+                                                  transactionKey.currentState.save();
                                                   print("_current_amount : $_amount");
-                                                  if(transaction_key.currentState.validate()){
+                                                  if(transactionKey.currentState.validate()){
                                                     print("validated");
                                                   }
                                                 },
